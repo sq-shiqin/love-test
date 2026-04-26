@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>你对石勤的真实感觉</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { width: 100%; max-width: 520px; padding: 20px; }
+
+  .screen { display: none; animation: fadeIn 0.6s ease; }
+  .screen.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Start */
+  .start-screen .logo {
+    font-size: 60px; margin-bottom: 20px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+
+  .start-screen h1 {
+    font-size: 30px; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff 0%, #888 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .start-screen .subtitle {
+    font-size: 15px; color: #6e6e73; margin-bottom: 40px; font-weight: 300;
+    text-align: center; line-height: 1.6;
+  }
+
+  .start-screen label {
+    display: block; font-size: 12px; color: #6e6e73; width: 100%;
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+  }
+
+  .start-screen input {
+    width: 100%; padding: 14px 18px; background: #1c1c1e;
+    border: 1px solid #2c2c2e; border-radius: 12px; color: #f5f5f5;
+    font-size: 16px; font-family: inherit; outline: none; transition: border-color 0.2s;
+    margin-bottom: 24px;
+  }
+  .start-screen input:focus { border-color: #fff; }
+  .start-screen input::placeholder { color: #48484a; }
+
+  .start-btn {
+    width: 100%; padding: 16px; background: #fff; color: #000; border: none;
+    border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: all 0.2s;
+  }
+  .start-btn:hover { background: #e5e5ea; }
+  .start-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .hint { font-size: 12px; color: #48484a; margin-top: 16px; text-align: center; }
+
+  /* Question */
+  .progress-bar { width: 100%; height: 3px; background: #1c1c1e; border-radius: 2px; margin-bottom: 32px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #fff; border-radius: 2px; transition: width 0.4s ease; }
+
+  .question-counter { font-size: 13px; color: #6e6e73; margin-bottom: 16px; font-weight: 300; }
+
+  .question-text {
+    font-size: 21px; font-weight: 700; line-height: 1.6; margin-bottom: 32px;
+    text-align: center; min-height: 80px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .options { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+  .option-btn {
+    width: 100%; padding: 16px 20px; background: #1c1c1e; border: 1px solid #2c2c2e;
+    border-radius: 14px; color: #f5f5f5; font-size: 15px; font-weight: 400;
+    cursor: pointer; font-family: inherit; text-align: left; transition: all 0.2s; line-height: 1.4;
+  }
+  .option-btn:hover { background: #2c2c2e; border-color: #fff; }
+  .option-btn:active { transform: scale(0.98); }
+  .option-btn.selected { background: #fff; color: #000; border-color: #fff; }
+
+  /* Result */
+  .result-screen .result-emoji { font-size: 80px; margin-bottom: 24px; animation: pop 0.6s ease; }
+  @keyframes pop { 0%{transform:scale(0);opacity:0} 50%{transform:scale(1.3)} 100%{transform:scale(1);opacity:1} }
+
+  .result-screen h2 { font-size: 26px; font-weight: 900; margin-bottom: 12px; text-align: center; }
+
+  .result-screen .score {
+    font-size: 64px; font-weight: 900; margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff 0%, #888 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .result-screen .score-label { font-size: 13px; color: #6e6e73; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .result-screen .analysis {
+    width: 100%; background: #1c1c1e; border: 1px solid #2c2c2e; border-radius: 16px;
+    padding: 24px; margin-bottom: 24px; text-align: left; line-height: 1.9; font-size: 14px; color: #a0a0a5;
+  }
+  .result-screen .analysis strong { color: #f5f5f5; }
+
+  .result-screen .tag-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 32px; }
+  .result-screen .tag { padding: 6px 14px; background: #1c1c1e; border: 1px solid #2c2c2e; border-radius: 20px; font-size: 13px; color: #a0a0a5; }
+
+  .restart-btn {
+    padding: 14px 40px; background: #2c2c2e; color: #f5f5f5; border: 1px solid #3a3a3c;
+    border-radius: 14px; font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: inherit; transition: all 0.2s;
+  }
+  .restart-btn:hover { background: #3a3a3c; }
+
+  /* Particles */
+  .particles { position: fixed; top:0;left:0;right:0;bottom:0; pointer-events:none; z-index:-1; overflow:hidden; }
+  .particle {
+    position: absolute; width:2px; height:2px; background: rgba(255,255,255,0.12);
+    border-radius: 50%; animation: float linear infinite;
+  }
+  @keyframes float { 0%{transform:translateY(100vh) scale(0);opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{transform:translateY(-10vh) scale(1);opacity:0} }
+
+  /* Confetti */
+  .confetti { position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:100; }
+  .confetti-piece { position:absolute;width:8px;height:8px;top:-10px;animation:fall 3s ease-in forwards; }
+  @keyframes fall { 0%{transform:translateY(0) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+  /* Easter egg */
+  .easter-egg {
+    display:none; position:fixed; top:0;left:0;right:0;bottom:0;
+    background:rgba(0,0,0,0.92); z-index:200; justify-content:center; align-items:center;
+    flex-direction:column; animation:fadeIn 0.5s ease;
+  }
+  .easter-egg.show { display:flex; }
+  .easter-egg .msg { font-size:18px; color:#a0a0a5; font-weight:300; margin-bottom:12px; }
+  .easter-egg .quote { font-size:28px; color:#fff; font-weight:700; margin:16px 0; }
+  .easter-egg .close { font-size:12px; color:#48484a; margin-top:20px; }
+
+  @media (max-width:540px) { .container{padding:16px} .start-screen h1{font-size:26px} .question-text{font-size:19px} }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <!-- Start -->
+  <div class="screen start-screen active" id="startScreen">
+    <div class="logo">?</div>
+    <h1>你对石勤的真实感觉</h1>
+    <p class="subtitle">
+      12 道题，揭开你内心深处<br>
+      一个你可能一直在回避的答案
+    </p>
+    <label>你的名字</label>
+    <input type="text" id="userName" placeholder="输入你的名字" maxlength="10">
+    <button class="start-btn" id="startBtn" disabled>开始测试</button>
+    <p class="hint">测试结果仅供娱乐 · 但也许会意外地准</p>
+  </div>
+
+  <!-- Questions -->
+  <div class="screen question-screen" id="questionScreen">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="question-counter" id="questionCounter"></div>
+    <div class="question-text" id="questionText"></div>
+    <div class="options" id="optionsContainer"></div>
+  </div>
+
+  <!-- Result -->
+  <div class="screen result-screen" id="resultScreen">
+    <div class="result-emoji" id="resultEmoji"></div>
+    <h2 id="resultTitle"></h2>
+    <div class="score" id="resultScore"></div>
+    <div class="score-label">心动指数</div>
+    <div class="tag-list" id="tagList"></div>
+    <div class="analysis" id="resultAnalysis"></div>
+    <button class="restart-btn" onclick="restart()">再测一次</button>
+  </div>
+</div>
+
+<div class="easter-egg" id="easterEgg" onclick="this.classList.remove('show')">
+  <p class="msg" id="easterMsg"></p>
+  <p class="quote" id="easterQuote"></p>
+  <p class="close">点击任意位置关闭</p>
+</div>
+
+<script>
+// Particles
+(function(){const c=document.getElementById('particles');for(let i=0;i<25;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*10+'s';p.style.width=p.style.height=(1+Math.random()*3)+'px';c.appendChild(p)}})();
+
+let userName='', currentQ=0, score=0, answers=[];
+
+const questions = [
+  {
+    text: '你第一次注意到石勤这个人，\n是因为什么？',
+    options: [
+      { text: 'Ta 的声音/笑声', score: 10 },
+      { text: 'Ta 做了某件小事', score: 12 },
+      { text: '不记得了，就是自然而然', score: 8 },
+      { text: '第一次见面就觉得不一样', score: 14 }
+    ]
+  },
+  {
+    text: '石勤深夜给你发消息说「睡不着」，\n你会？',
+    options: [
+      { text: '秒回，陪 Ta 聊到睡着', score: 12 },
+      { text: '回一句「怎么了」', score: 8 },
+      { text: '第二天再回', score: 2 },
+      { text: '直接打电话过去', score: 10 }
+    ]
+  },
+  {
+    text: '你觉得石勤身上\n最吸引你的特质是什么？',
+    options: [
+      { text: '温柔/细心', score: 10 },
+      { text: '有趣/幽默', score: 9 },
+      { text: '认真/有上进心', score: 8 },
+      { text: '说不上来，但就是被吸引', score: 14 }
+    ]
+  },
+  {
+    text: '石勤突然三天没联系你，\n你的第一反应是？',
+    options: [
+      { text: '很担心，忍不住主动找 Ta', score: 12 },
+      { text: '有点在意但忍着', score: 10 },
+      { text: '无所谓，各忙各的', score: 2 },
+      { text: '会翻聊天记录看哪里不对', score: 13 }
+    ]
+  },
+  {
+    text: '你有没有偷偷保存过\n石勤发给你的照片/截图？',
+    options: [
+      { text: '有，而且经常翻出来看', score: 14 },
+      { text: '没有刻意保存，但记得很清楚', score: 11 },
+      { text: '没注意过', score: 3 },
+      { text: '何止照片，连语音都收藏了', score: 16 }
+    ]
+  },
+  {
+    text: '朋友突然问你「你是不是喜欢石勤」，\n你会怎么回答？',
+    options: [
+      { text: '「没有啊，我们只是朋友」（但心跳加速）', score: 14 },
+      { text: '「你想多了」', score: 6 },
+      { text: '「不知道…」', score: 12 },
+      { text: '「你怎么看出来的」（不小心说漏嘴）', score: 16 }
+    ]
+  },
+  {
+    text: '如果石勤约你单独出去，\n你会？',
+    options: [
+      { text: '开心到飞起，然后纠结穿什么', score: 14 },
+      { text: '去啊，就普通出去玩', score: 6 },
+      { text: '会紧张，怕尴尬', score: 11 },
+      { text: '已经期待了很久了', score: 15 }
+    ]
+  },
+  {
+    text: '想象一下石勤以后\n和别人在一起了，你会？',
+    options: [
+      { text: '祝福，但心里很酸', score: 14 },
+      { text: '真心替 Ta 高兴', score: 5 },
+      { text: '拒绝想象这个画面', score: 16 },
+      { text: '可能会难过一阵子', score: 13 }
+    ]
+  },
+  {
+    text: '你和石勤在一起时，\n最常出现的状态是？',
+    options: [
+      { text: '话很多，什么都想说', score: 10 },
+      { text: '安静待着也很舒服', score: 13 },
+      { text: '莫名紧张，怕说错话', score: 14 },
+      { text: '时间过得特别快', score: 11 }
+    ]
+  },
+  {
+    text: '你有没有在某个瞬间\n觉得「如果能和石勤在一起就好了」？',
+    options: [
+      { text: '有，而且不止一次', score: 16 },
+      { text: '偶尔闪过这个念头', score: 12 },
+      { text: '没想过', score: 3 },
+      { text: '现在你这么一问，好像有', score: 14 }
+    ]
+  },
+  {
+    text: '如果让你用一个词形容石勤，\n你会选？',
+    options: [
+      { text: '特别', score: 12 },
+      { text: '温暖', score: 10 },
+      { text: '不可替代', score: 15 },
+      { text: '未来', score: 16 }
+    ]
+  },
+  {
+    text: '最后一题：\n你现在脑子里想的是谁？',
+    options: [
+      { text: '石勤', score: 20 },
+      { text: '还是石勤', score: 20 },
+      { text: '我不敢说', score: 16 },
+      { text: '不是石勤', score: 0 }
+    ]
+  }
+];
+
+function getResults(score, name) {
+  const maxScore = questions.reduce((s, q) => s + Math.max(...q.options.map(o => o.score)), 0);
+  const pct = Math.round((score / maxScore) * 100);
+
+  if (pct >= 80) return {
+    emoji: '', title: `${name}，你骗不了任何人`,
+    tags: ['已沦陷', '心照不宣', '上头了', '别装了'],
+    analysis: `<strong>${name}</strong>，数据不会说谎。<br><br>你会保存石勤的每一张照片、每一条语音。你在意 Ta 的一举一动，会因为 Ta 没回消息而翻聊天记录找原因。当朋友问起你们的关系，你嘴上说"只是朋友"，心跳却出卖了你。<br><br><strong>你已经喜欢上石勤了。</strong><br><br>与其继续骗自己，不如勇敢一次。有些人错过就真的错过了。`
+  };
+  if (pct >= 60) return {
+    emoji: '', title: '你的心，比你诚实',
+    tags: ['暧昧中', '差一步', '小心翼翼', '快要藏不住'],
+    analysis: `<strong>${name}</strong>，你对石勤的感觉已经超出了普通朋友的范畴。<br><br>你会因为 Ta 的一个消息开心半天，会在某个瞬间冒出"如果在一起就好了"的念头。你不敢承认，但你的答案已经暴露了一切。<br><br><strong>暧昧的尽头不是在一起，就是渐行渐远。</strong>想清楚了就别犹豫。`
+  };
+  if (pct >= 40) return {
+    emoji: '', title: '种子已经种下了',
+    tags: ['有好感', '还在观察', '若即若离', '说不清'],
+    analysis: `<strong>${name}</strong>，你对石勤的感觉还比较模糊，但有些细节已经说明了一切。<br><br>你会不自觉地关注 Ta，会在某些时刻感到特别。这种好感正在悄悄生长，只是你还没有完全意识到。<br><br><strong>有些人的好，需要相处久了才发现。</strong>给自己多一点时间。`
+  };
+  return {
+    emoji: '', title: '也许，还差一点缘分',
+    tags: ['普通朋友', '需要时间', '缘分未到'],
+    analysis: `<strong>${name}</strong>，从你的回答来看，你和石勤目前还停留在朋友阶段。<br><br>但缘分这种事谁说得准呢？有些人第一次见面不觉得特别，相处久了才发现离不开。<br><br><strong>答案不重要，重要的是你们还在彼此的生活里。</strong>`
+  };
+}
+
+// Init
+const startBtn = document.getElementById('startBtn');
+const userNameInput = document.getElementById('userName');
+userNameInput.addEventListener('input', () => { startBtn.disabled = !userNameInput.value.trim(); });
+
+startBtn.addEventListener('click', () => {
+  userName = userNameInput.value.trim();
+  showScreen('questionScreen');
+  showQuestion();
+});
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('questionCounter').textContent = `${currentQ + 1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width = (currentQ / questions.length * 100) + '%';
+  document.getElementById('questionText').textContent = q.text;
+
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+  shuffled.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => selectOption(btn, opt.score));
+    container.appendChild(btn);
+  });
+}
+
+function selectOption(btn, optScore) {
+  btn.classList.add('selected');
+  score += optScore;
+  answers.push({ q: currentQ, score: optScore });
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) showQuestion();
+    else { document.getElementById('progressFill').style.width = '100%'; showResult(); }
+  }, 400);
+}
+
+function showResult() {
+  const r = getResults(score, userName);
+  document.getElementById('resultEmoji').textContent = r.emoji;
+  document.getElementById('resultTitle').textContent = r.title;
+  document.getElementById('resultScore').textContent = score;
+  document.getElementById('resultAnalysis').innerHTML = r.analysis;
+  const tagList = document.getElementById('tagList');
+  tagList.innerHTML = '';
+  r.tags.forEach(t => { const el = document.createElement('span'); el.className = 'tag'; el.textContent = t; tagList.appendChild(el); });
+
+  // Easter egg for high scores
+  if (score >= 150) {
+    setTimeout(() => {
+      document.getElementById('easterMsg').textContent = `${userName}，石勤让我偷偷告诉你一件事：`;
+      document.getElementById('easterQuote').textContent = '「我喜欢你，很久了」';
+      document.getElementById('easterEgg').classList.add('show');
+    }, 2500);
+  }
+
+  showScreen('resultScreen');
+  // Confetti
+  const cc = document.createElement('div'); cc.className = 'confetti'; document.body.appendChild(cc);
+  const colors = ['#fff','#a0a0a0','#666','#ccc'];
+  for (let i = 0; i < 35; i++) {
+    const p = document.createElement('div'); p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDuration = (2 + Math.random() * 2) + 's';
+    p.style.animationDelay = Math.random() * 1.5 + 's';
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+    p.style.width = p.style.height = (4 + Math.random() * 8) + 'px';
+    cc.appendChild(p);
+  }
+  setTimeout(() => cc.remove(), 5000);
+}
+
+function restart() { currentQ = 0; score = 0; answers = []; showScreen('startScreen'); }
+</script>
+</body>
+</html>
